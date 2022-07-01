@@ -170,7 +170,6 @@ function applyChangeToFormula(operation,category)
     const numberRegex = /0|1|2|3|4|5|6|7|8|9|0/;
     
     calcInfo.html("");
-    console.log(lastString)
     //押されたボタンの種類によって処理を分岐
     switch (category)
     {
@@ -190,10 +189,10 @@ function applyChangeToFormula(operation,category)
             }
             else if (lastString == ")")
             {
-                console.log(separators[separators.length-3])
                 if (separators[separators.length-2] == "-" && separators[separators.length-3] == "(")
                 {
                     deleteResult(calcResult.html().length-1,1);
+                    unclosedBracketCount -= 1;
                     isNegative = true;
                 }
                 unclosedBracketCount += 1;
@@ -226,7 +225,6 @@ function applyChangeToFormula(operation,category)
         case "Number":
             if (calcResult.html() == "0")
             {
-                console.log(operation)
                 calcResult.html(operation);
                 isRightInput = false;
             }
@@ -262,6 +260,11 @@ function applyChangeToFormula(operation,category)
             if (calcResult.html() == "0")
             {
                 calcResult.html(operation)
+                unclosedBracketCount += 1;
+            }
+            else if (lastString == "(")
+            {
+                addStrToResult(operation);
                 unclosedBracketCount += 1;
             }
             else if (numberRegex.test(lastString))
@@ -305,7 +308,6 @@ function applyChangeToFormula(operation,category)
                 }
                 
             }
-            
             break;
 
         case "Sign":
@@ -380,7 +382,6 @@ function applyChangeToFormula(operation,category)
             $("#calcInfo").html("式が不完全です。");
             break;
     }
-    console.log(isNegative)
     return true;
 }
 
